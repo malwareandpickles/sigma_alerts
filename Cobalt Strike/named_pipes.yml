@@ -1,0 +1,33 @@
+Detects default Cobalt Strike named pipes.
+
+Kibana:
+
+eventid:17 AND (pipename:MSSE* OR pipename:postex* OR pipename:msagent* OR pipename:status_*)
+
+Sigma:
+
+title: Cobalt Strike named Pipes
+status: experimental
+description: Detects default Cobalt Strike named pipes.
+author: Tom Johansson
+date: 2021/02/25
+references:
+  - https://blog.cobaltstrike.com/2021/02/09/learn-pipe-fitting-for-all-of-your-offense-projects/
+tags:
+    - malware.S0154
+    - protocol.tunneling.T1572
+logsource:
+    product: windows
+    service: sysmon 
+detection:
+    selection:
+      eventid: 17
+      pipename: 
+         - 'MSSE*'
+         - 'postex*'
+         - 'msagent*'
+         - 'status_*'
+    condition: selection
+falsepositives:
+    - unknown / depends on environment
+level: high

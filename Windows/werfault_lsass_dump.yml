@@ -1,0 +1,28 @@
+Detects the dumping of lsass via werfault or taskkill as per the excellent write up from deepinstinct.com
+
+Sigma:
+
+title: Dumping lsass via taskkill
+status: experimental
+description: Detects dumping of lsass credentials via killing the process with taskkill.
+author: Tom Johansson
+date: 2021/02/24
+references:
+  - https://www.deepinstinct.com/2021/02/16/lsass-memory-dumps-are-stealthier-than-ever-before-part-2/
+
+tags:
+    - attack.credential_access
+logsource:
+    product: sysmon
+detection:
+    selection1:
+        eventid: 12
+        targetobject: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SilentProcessExit\lsass.exe'
+    selection2:
+        eventid: 13
+        targetobject: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\lsass.exe'
+
+    condition: selection1 OR selection2
+falsepositives:
+    - These events should be rare.
+level: high
